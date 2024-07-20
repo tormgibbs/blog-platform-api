@@ -5,8 +5,8 @@ import {
   getPostComments,
   getUser,
   getUserPost,
-} from '@/controllers/userController'
-import middleware from '@/utils/middleware'
+} from '../controllers/userController'
+import middleware from '../utils/middleware'
 import { Router } from 'express'
 
 const { validateParams, isPositiveInteger, tokenExtractor, userExtractor } = middleware

@@ -1,4 +1,4 @@
-import auth from '@/services/authService'
+import auth from '../services/authService'
 import { RequestHandler } from 'express'
 
 export const authenticateUser: RequestHandler = async (request, response) => {

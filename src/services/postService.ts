@@ -1,5 +1,5 @@
-import { newpostSchema, updatePostSchema, ValidationError } from '@/utils/parsers'
-import prisma from '@/prisma/db'
+import { newpostSchema, updatePostSchema, ValidationError } from '../utils/parsers'
+import prisma from '../prisma/db'
 import { CustomError } from './commentService'
 
 const getAll = async () => {

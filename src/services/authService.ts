@@ -1,9 +1,9 @@
-import { loginSchema, ValidationError } from '@/utils/parsers'
-import prisma from '@/prisma/db'
+import { loginSchema, ValidationError } from '../utils/parsers'
+import prisma from '../prisma/db'
 import bcrypt from 'bcrypt'
 import { EncryptJWT } from 'jose'
 import { CustomError } from './commentService'
-import config from '@/utils/config'
+import config from '../utils/config'
 
 const verifyPassword = async (password: string, hash: string) => {
   return await bcrypt.compare(password, hash)

@@ -2,9 +2,9 @@ import express from 'express'
 import 'express-async-errors'
 import cors from 'cors'
 import middleware from './utils/middleware'
-import postRouter from '@/routes/posts'
-import userRouter from '@/routes/users'
-import authRouter from '@/routes/auth'
+import postRouter from './routes/posts'
+import userRouter from './routes/users'
+import authRouter from './routes/auth'
 
 const app = express()
 app.use(cors())

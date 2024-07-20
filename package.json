@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "A Blog Platform API built with typescript, node.js and express",
   "main": "index.js",
-  "type": "module",
   "prisma": {
     "seed": "tsx prisma/seed.ts"
   },
@@ -24,6 +23,7 @@
     "globals": "^15.8.0",
     "prettier": "^3.3.2",
     "prisma": "^5.17.0",
+    "tsconfig-paths": "^4.2.0",
     "tsx": "^4.16.2",
     "typescript": "^5.5.3",
     "typescript-eslint": "^7.16.0"
