@@ -1,4 +1,5 @@
 import postService from '@/services/postService'
+import { CustomRequest, User } from '@/utils/middleware'
 import { Request, RequestHandler, Response } from 'express'
 
 export const getAllPosts = async (_request: Request, response: Response) => {
@@ -18,9 +19,10 @@ export const createPost = async (request: Request, response: Response) => {
   response.status(201).json(post)
 }
 
-export const deletePost = async (request: Request, response: Response) => {
+export const deletePost: RequestHandler = async (request: CustomRequest, response: Response) => {
   const { id } = request.params
-  await postService.deleteOne(Number(id))
+  const { username } = request.user as User
+  await postService.deleteOne(Number(id), username)
   response.status(204).end()
 }
 

@@ -40,6 +40,10 @@ const getOne = async (postId: number, commentId: number) => {
     },
   })
 
+  if (!comment) {
+    throw new CustomError('CommentNotFoundError', 'Comment not found or does not belong to the specified post')
+  }
+
   return {
     id: comment?.id,
     content: comment?.content,
