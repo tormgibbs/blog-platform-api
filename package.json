@@ -8,6 +8,7 @@
   },
   "scripts": {
     "start": "node build/index.js",
+    "build": "tsc",
     "dev": "tsx --watch src/index.ts",
     "tsc": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
