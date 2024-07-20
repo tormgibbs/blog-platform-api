@@ -8,6 +8,7 @@
     "seed": "tsx prisma/seed.ts"
   },
   "scripts": {
+    "start": "node build/index.js",
     "dev": "tsx --watch src/index.ts",
     "tsc": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -22,7 +23,7 @@
     "eslint": "^9.6.0",
     "globals": "^15.8.0",
     "prettier": "^3.3.2",
-    "prisma": "^5.16.2",
+    "prisma": "^5.17.0",
     "tsx": "^4.16.2",
     "typescript": "^5.5.3",
     "typescript-eslint": "^7.16.0"
@@ -31,7 +32,7 @@
     "eslint": "^9.6.0"
   },
   "dependencies": {
-    "@prisma/client": "^5.16.2",
+    "@prisma/client": "^5.17.0",
     "@types/bcrypt": "^5.0.2",
     "@types/cors": "^2.8.17",
     "@types/uuid": "^10.0.0",

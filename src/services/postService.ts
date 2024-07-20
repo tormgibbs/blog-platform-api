@@ -1,5 +1,5 @@
 import { newpostSchema, updatePostSchema, ValidationError } from '@/utils/parsers'
-import prisma from 'prisma/db'
+import prisma from '@/prisma/db'
 import { CustomError } from './commentService'
 
 const getAll = async () => {
@@ -54,8 +54,18 @@ const createOne = async (data: unknown) => {
     const errorMessages = newPost.error.errors.map(err => err.message)
     throw new ValidationError(errorMessages)
   }
+
+  const user = await prisma.user.findUniqueOrThrow({
+    where: { username: newPost.data.username },
+    select: { id: true }
+  })
+
   const savedPost = await prisma.post.create({
-    data: newPost.data,
+    data: {
+      title: newPost.data.title,
+      content: newPost.data.content,
+      userId: user.id,
+    }
   })
   return savedPost
 }
@@ -79,11 +89,24 @@ const deleteOne = async (id: number, user: string) => {
 
 const updateOne = async (data: unknown) => {
   const postToUpdate = updatePostSchema.safeParse(data)
-  console.log(postToUpdate.data)
+
   if (!postToUpdate.success) {
     const errorMessages = postToUpdate.error.errors.map(err => err.message)
     throw new ValidationError(errorMessages)
   }
+
+  const post = await prisma.post.findUniqueOrThrow({
+    where: { id: postToUpdate.data.postId },
+    select: { user: { select: { username: true } } }
+  })
+
+  const postUser = post.user.username
+  const user = postToUpdate.data.username
+
+  if (postUser !== user) {
+    throw new CustomError('AuthorizationError', 'User does not have the permission',)
+  }
+
   const updatedPost = await prisma.post.update({
     where: { id: postToUpdate.data.postId },
     data: {

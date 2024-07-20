@@ -50,7 +50,6 @@ const requestLogger = (
 ) => {
   logger.info('Method:', request.method)
   logger.info('Path:', request.path)
-  logger.info('Body:', request.body)
   // Listen for the finish event on the response to log the status code
   response.on('finish', () => {
     logger.info('Response Status:', response.statusCode)
@@ -89,7 +88,6 @@ const userExtractor: RequestHandler = async (request: CustomRequest, response, n
     issuer: 'urn:example:issuer',
     audience: 'urn:example:audience'
   })
-  console.log(payload)
   request.user = payload as unknown as User
   next()
   return
@@ -101,10 +99,6 @@ const unknownEndpoint = (_request: Request, response: Response) => {
 
 
 const errorHandler: ErrorRequestHandler = (error, _request, response, next) => {
-  logger.error(error)
-  logger.error('Error Message: ',error.message)
-  logger.error('Error Name: ',error.name)
-
 
   if (error.name === 'ValidationError') {
     if (error instanceof ValidationError) {
@@ -130,6 +124,8 @@ const errorHandler: ErrorRequestHandler = (error, _request, response, next) => {
       return response.status(403).json({ error: error.message })
     }
     return response.status(404).json({ error: error.message })
+  } else if (error.name === 'JWTExpired') {
+    return response.status(401).json({ error: 'Token expired' })
   }
 
   next(error)

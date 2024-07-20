@@ -1,5 +1,6 @@
 import { RequestHandler } from 'express'
 import commentService from '@/services/commentService'
+import { CustomRequest, User } from '@/utils/middleware'
 
 export const getAllComments: RequestHandler = async (request, response) => {
   const { id } = request.params
@@ -14,34 +15,40 @@ export const getCommentById: RequestHandler = async (request, response) => {
   response.json(comment)
 }
 
-export const deleteAllComments: RequestHandler = async (request, response) => {
+export const deleteAllComments: RequestHandler = async (request: CustomRequest, response) => {
   const { id } = request.params
-  await commentService.deleteAll(Number(id))
+  const { username } = request.user as User
+  await commentService.deleteAll(Number(id), username)
   response.status(204).end()
 }
 
-export const createComment: RequestHandler = async (request, response) => {
+export const createComment: RequestHandler = async (request: CustomRequest, response) => {
   const { id } = request.params
+  const { username } = request.user as User
   const comment = await commentService.createOne({
     ...request.body,
-    postId: Number(id)
+    postId: Number(id),
+    username
   })
   response.status(201).json(comment)
 }
 
-export const updateComment: RequestHandler = async (request, response) => {
+export const updateComment: RequestHandler = async (request: CustomRequest, response) => {
   const { id, commentId } = request.params
+  const { username } = request.user as User
   const comment = await commentService.updateOne({
     ...request.body,
     postId: Number(id),
-    commentId: Number(commentId)
+    commentId: Number(commentId),
+    username
   })
   response.json(comment)
 }
 
 
-export const deleteComment: RequestHandler = async (request, response) => {
+export const deleteComment: RequestHandler = async (request: CustomRequest, response) => {
   const { id, commentId } = request.params
-  await commentService.deleteOne(Number(id), Number(commentId))
+  const { username } = request.user as User
+  await commentService.deleteOne(Number(id), Number(commentId), username)
   response.status(204).end()
 }
