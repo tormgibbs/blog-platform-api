@@ -3,6 +3,8 @@ import 'express-async-errors'
 import cors from 'cors'
 import middleware from './utils/middleware'
 import postRouter from '@/routes/posts'
+import userRouter from '@/routes/users'
+import authRouter from '@/routes/auth'
 
 const app = express()
 app.use(cors())
@@ -15,6 +17,8 @@ app.get('/', (_req, res) => {
 })
 
 app.use('/api/posts',postRouter)
+app.use('/api/users',userRouter)
+app.use('/api/auth',authRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)

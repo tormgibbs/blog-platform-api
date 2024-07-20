@@ -1,13 +1,23 @@
 import prisma from './db'
+import bcrypt from 'bcrypt'
+
+const passwordToHash = async (password: string) => {
+  const salt = await bcrypt.genSalt(10)
+  const hashedPassword = await bcrypt.hash(password, salt)
+  return hashedPassword
+}
 
 const main = async () => {
   // User 1: Selase
+  const selasePassword = await passwordToHash('selase123')
+
   const selase = await prisma.user.upsert({
     where: { email: 'emmasela04@gmail.com' },
     update: {},
     create: {
       username: 'tormgibbs',
       email: 'emmasela04@gmail.com',
+      password: selasePassword,
       posts: {
         create: {
           title: 'My first blog. hahha',
@@ -18,12 +28,15 @@ const main = async () => {
   })
 
   // User 2: Sabina
+  const sabinaPassword = await passwordToHash('sabina123')
+
   const sabina = await prisma.user.upsert({
     where: { email: 'blefonoSabina233@gmail.com' },
     update: {},
     create: {
       username: 'slimbones05',
       email: 'blefonoSabina233@gmail.com',
+      password: sabinaPassword,
       posts: {
         create: {
           title: 'Why Give Up?',
@@ -34,12 +47,15 @@ const main = async () => {
   })
 
   // User 3: John Doe
+  const johnPassword = await passwordToHash('john123')
+
   const john = await prisma.user.upsert({
     where: { email: 'john.doe@example.com' },
     update: {},
     create: {
       username: 'johnnydoe',
       email: 'john.doe@example.com',
+      password: johnPassword,
       posts: {
         create: [
           {
@@ -56,12 +72,15 @@ const main = async () => {
   })
 
   // User 4: Jane Smith
+  const janePassword = await passwordToHash('jane123')
+
   const jane = await prisma.user.upsert({
     where: { email: 'jane.smith@example.com' },
     update: {},
     create: {
       username: 'janesmith123',
       email: 'jane.smith@example.com',
+      password: janePassword,
       posts: {
         create: [
           {

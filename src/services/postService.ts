@@ -1,5 +1,6 @@
 import { newpostSchema, updatePostSchema, ValidationError } from '@/utils/parsers'
 import prisma from 'prisma/db'
+import { CustomError } from './commentService'
 
 const getAll = async () => {
   const posts = await prisma.post.findMany({
@@ -59,9 +60,20 @@ const createOne = async (data: unknown) => {
   return savedPost
 }
 
-const deleteOne = async (id: number) => {
+const deleteOne = async (id: number, user: string) => {
+  const post = await prisma.post.findUniqueOrThrow({
+    where: { id },
+    select: { user: { select: { username: true } } }
+  })
+
+  const postUser = post.user.username
+
+  if (postUser !== user) {
+    throw new CustomError('AuthorizationError', 'User does not have the permission',)
+  }
+
   await prisma.post.delete({
-    where: { id }
+    where: { id },
   })
 }
 
