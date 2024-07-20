@@ -2,8 +2,8 @@ import {
   newCommentSchema,
   updateCommentSchema,
   ValidationError,
-} from '@/utils/parsers'
-import prisma from '@/prisma/db'
+} from '../utils/parsers'
+import prisma from '../prisma/db'
 
 const getAll = async (postId: number) => {
   const comments = await prisma.comment.findMany({

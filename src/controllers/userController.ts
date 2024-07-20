@@ -1,5 +1,5 @@
-import userService from '@/services/userService'
-import { CustomRequest, User } from '@/utils/middleware'
+import userService from '../services/userService'
+import { CustomRequest, User } from '../utils/middleware'
 import { RequestHandler } from 'express'
 
 export const createUser: RequestHandler = async (request, response) => {

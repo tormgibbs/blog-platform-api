@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express'
-import commentService from '@/services/commentService'
-import { CustomRequest, User } from '@/utils/middleware'
+import commentService from '../services/commentService'
+import { CustomRequest, User } from '../utils/middleware'
 
 export const getAllComments: RequestHandler = async (request, response) => {
   const { id } = request.params

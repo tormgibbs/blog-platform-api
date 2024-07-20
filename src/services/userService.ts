@@ -1,6 +1,6 @@
-import { newUserSchema, ValidationError } from '@/utils/parsers'
+import { newUserSchema, ValidationError } from '../utils/parsers'
 import bcrypt from 'bcrypt'
-import prisma from '@/prisma/db'
+import prisma from '../prisma/db'
 import { CustomError } from './commentService'
 
 const passwordToHash = async (password: string) => {

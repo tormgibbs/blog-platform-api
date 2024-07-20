@@ -2,7 +2,7 @@ import { ErrorRequestHandler, NextFunction, Request, RequestHandler, Response } 
 import logger from './logger'
 import { ValidationError } from './parsers'
 import { Prisma } from '@prisma/client'
-import { CustomError } from '@/services/commentService'
+import { CustomError } from '../services/commentService'
 import { jwtDecrypt } from 'jose'
 import config from './config'
 

@@ -1,5 +1,5 @@
-import postService from '@/services/postService'
-import { CustomRequest, User } from '@/utils/middleware'
+import postService from '../services/postService'
+import { CustomRequest, User } from '../utils/middleware'
 import { Request, RequestHandler, Response } from 'express'
 
 export const getAllPosts = async (_request: Request, response: Response) => {

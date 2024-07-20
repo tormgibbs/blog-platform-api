@@ -5,16 +5,16 @@ import {
   getAllComments,
   getCommentById,
   updateComment,
-} from '@/controllers/commentController'
+} from '../controllers/commentController'
 import {
   createPost,
   deletePost,
   getAllPosts,
   getPostById,
   updatePost,
-} from '@/controllers/postController'
+} from '../controllers/postController'
 import { Router } from 'express'
-import middleware from '@/utils/middleware'
+import middleware from '../utils/middleware'
 const { validateParams, isPositiveInteger, tokenExtractor, userExtractor } = middleware
 
 const router = Router()
