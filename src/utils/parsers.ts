@@ -15,19 +15,23 @@ export const newpostSchema = z.object({
     })
     .min(5, { message: 'Content must be at least 20 characters long' }),
 
-  userId: z
-    .number({
-      required_error: 'User ID is required',
-      invalid_type_error: 'User ID must be a number',
-    })
-    .int({ message: 'User ID must be an integer' }),
+  // userId: z
+  //   .number({
+  //     required_error: 'User ID is required',
+  //     invalid_type_error: 'User ID must be a number',
+  //   })
+  //   .int({ message: 'User ID must be an integer' }),
 
+  username: z.string({
+    required_error: 'Username is required',
+    invalid_type_error: 'Username must be a string',
+  })
 })
 
 export const updatePostSchema = z.object({
   title: newpostSchema.shape.title.optional(),
   content: newpostSchema.shape.content.optional(),
-  userId: newpostSchema.shape.userId,
+  username: newpostSchema.shape.username,
   postId: z
     .number({
       required_error: 'Post ID is required',
@@ -53,19 +57,15 @@ export const newCommentSchema = z.object({
     .int({
       message: 'Post ID must be an integer',
     }),
-  userId: z
-    .number({
-      required_error: 'User ID is required',
-      invalid_type_error: 'User ID must be a number',
-    })
-    .int({
-      message: 'User ID must be an integer',
-    }),
+  username: z.string({
+    required_error: 'Username is required',
+    invalid_type_error: 'Username must be a string',
+  })
 })
 
 export const updateCommentSchema = z.object({
   content: newCommentSchema.shape.content.optional(),
-  userId: newCommentSchema.shape.userId,
+  username: newCommentSchema.shape.username,
   commentId: z
     .number({
       required_error: 'Comment ID is required',

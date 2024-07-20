@@ -1,6 +1,6 @@
 import { newUserSchema, ValidationError } from '@/utils/parsers'
 import bcrypt from 'bcrypt'
-import prisma from 'prisma/db'
+import prisma from '@/prisma/db'
 import { CustomError } from './commentService'
 
 const passwordToHash = async (password: string) => {
@@ -144,9 +144,10 @@ const getComment = async (username: string, postId: number, commentId: number) =
   }
 }
 
-const deleteOne = async (id: number) => {
+const deleteOne = async (username: string) => {
+  const user = await prisma.user.findUniqueOrThrow({ where: { username }, select: { id: true } })
   await prisma.user.delete({
-    where: { id }
+    where: { id: user.id }
   })
 }
 

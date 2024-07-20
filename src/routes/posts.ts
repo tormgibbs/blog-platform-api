@@ -21,17 +21,17 @@ const router = Router()
 
 router.get('/', getAllPosts)
 
-router.post('/', createPost)
+router.post('/', [tokenExtractor, userExtractor] , createPost)
 
 router.get('/:id', validateParams({ id: isPositiveInteger }), getPostById)
 
-router.put('/:id', validateParams({ id: isPositiveInteger }), updatePost)
+router.put('/:id', [validateParams({ id: isPositiveInteger }), tokenExtractor, userExtractor], updatePost)
 
 router.delete('/:id', [validateParams({ id: isPositiveInteger }), tokenExtractor, userExtractor], deletePost)
 
 router.get(
   '/:id/comments',
-  [validateParams({ id: isPositiveInteger }), tokenExtractor, userExtractor],
+  validateParams({ id: isPositiveInteger }),
   getAllComments
 )
 
@@ -43,7 +43,7 @@ router.post(
 
 router.delete(
   '/:id/comments',
-  validateParams({ id: isPositiveInteger }),
+  [validateParams({ id: isPositiveInteger }), tokenExtractor, userExtractor],
   deleteAllComments
 )
 
@@ -60,20 +60,24 @@ router.get(
 
 router.put(
   '/:id/comments/:commentId',
-  validateParams({
+  [validateParams({
     id: isPositiveInteger,
     commentId: isPositiveInteger,
-  }),
+  }), tokenExtractor, userExtractor],
   updateComment
 )
 
 
 router.delete(
   '/:id/comments/:commentId',
-  validateParams({
-    id: isPositiveInteger,
-    commentId: isPositiveInteger,
-  }),
+  [
+    validateParams({
+      id: isPositiveInteger,
+      commentId: isPositiveInteger,
+    }),
+    tokenExtractor,
+    userExtractor,
+  ],
   deleteComment
 )
 

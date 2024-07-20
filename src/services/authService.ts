@@ -1,5 +1,5 @@
 import { loginSchema, ValidationError } from '@/utils/parsers'
-import prisma from 'prisma/db'
+import prisma from '@/prisma/db'
 import bcrypt from 'bcrypt'
 import { EncryptJWT } from 'jose'
 import { CustomError } from './commentService'
@@ -32,12 +32,11 @@ const authenticate = async (data: unknown) => {
     where: { email: loginData.data.email }
   })
 
-  console.log('user status: ',user)
+
 
   if (!user) throw new CustomError('UserNotFoundError', 'User not found')
 
   const authenticatedUser = await verifyPassword(loginData.data.password, user.password)
-  console.log('auth status: ',authenticatedUser)
   if (!authenticatedUser) throw new CustomError('AuthenticationError', 'Invalid credentials')
 
   const userForToken = {

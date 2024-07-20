@@ -3,7 +3,7 @@ import {
   updateCommentSchema,
   ValidationError,
 } from '@/utils/parsers'
-import prisma from 'prisma/db'
+import prisma from '@/prisma/db'
 
 const getAll = async (postId: number) => {
   const comments = await prisma.comment.findMany({
@@ -58,8 +58,18 @@ const createOne = async (data: unknown) => {
     const errorMessages = newComment.error.errors.map((err) => err.message)
     throw new ValidationError(errorMessages)
   }
+
+  const user = await prisma.user.findUniqueOrThrow({
+    where: { username: newComment.data.username },
+    select: { id: true }
+  })
+
   const savedComment = await prisma.comment.create({
-    data: newComment.data,
+    data: {
+      content: newComment.data.content,
+      postId: newComment.data.postId,
+      userId: user.id,
+    }
   })
   return savedComment
 }
@@ -71,26 +81,37 @@ export class CustomError extends Error {
   }
 }
 
-const deleteOne = async ( postId: number, commentId: number ) => {
-  const postToDelete = await prisma.comment.deleteMany({
-    where: {
-      AND: [
-        { id: commentId },
-        { postId }
-      ]
-    },
+const deleteOne = async ( postId: number, commentId: number, user: string ) => {
+  const comment = await prisma.comment.findUniqueOrThrow({
+    where: { id: commentId, postId },
+    select: { user: { select: { username: true } } }
   })
 
-  console.log(postToDelete.count)
-
-  if (postToDelete.count === 0) {
-    throw new CustomError('CommentNotFoundError', 'Comment not found or does not belong to the specified post')
+  if (comment.user.username !== user) {
+    throw new CustomError('AuthorizationError', 'User does not have the permission')
   }
+
+  await prisma.comment.delete({
+    where: {
+      id: commentId,
+      postId: postId,
+      user: { username: user }
+    }
+  })
 }
 
-const deleteAll = async (postId: number) => {
+const deleteAll = async (postId: number, user: string) => {
+  const post = await prisma.post.findUniqueOrThrow({
+    where: { id: postId },
+    select: { user: { select : { username: true } } }
+  })
+
+  if (post.user.username !== user) {
+    throw new CustomError('AuthorizationError', 'User does not have the permission')
+  }
+
   await prisma.comment.deleteMany({
-    where: { postId },
+    where: { postId, },
   })
 }
 
@@ -100,6 +121,16 @@ const updateOne = async (data: unknown) => {
     const errorMessages = commentToUpdate.error.errors.map((err) => err.message)
     throw new ValidationError(errorMessages)
   }
+
+  const comment = await prisma.comment.findUniqueOrThrow({
+    where: { id: commentToUpdate.data.commentId },
+    select: { user: { select : { username: true } } }
+  })
+
+  if (comment.user.username !== commentToUpdate.data.username) {
+    throw new CustomError('AuthorizationError', 'User does not have the permission')
+  }
+
   const updatedComment = await prisma.comment.update({
     where: { id: commentToUpdate.data.commentId },
     data: {

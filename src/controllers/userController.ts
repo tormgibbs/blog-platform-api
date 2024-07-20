@@ -1,4 +1,5 @@
 import userService from '@/services/userService'
+import { CustomRequest, User } from '@/utils/middleware'
 import { RequestHandler } from 'express'
 
 export const createUser: RequestHandler = async (request, response) => {
@@ -8,10 +9,17 @@ export const createUser: RequestHandler = async (request, response) => {
 }
 
 
-export const deleteUser: RequestHandler = async (request, response) => {
-  const { id } = request.params
-  await userService.deleteOne(Number(id))
+export const deleteUser: RequestHandler = async (request: CustomRequest, response) => {
+  const { username: paramUsername } = request.params
+  const { username: userUsername  } = request.user as User
+
+  if (paramUsername !== userUsername) {
+    return response.status(403).json({ error: 'You are not authorized to delete this user' })
+  }
+
+  await userService.deleteOne(paramUsername)
   response.status(204).end()
+  return
 }
 
 export const getUser: RequestHandler = async (request, response) => {
@@ -28,8 +36,6 @@ export const getUserPost: RequestHandler = async (request, response) => {
 
 export const getPostComments: RequestHandler = async (request, respose) => {
   const { username, postId } = request.params
-  console.log('username', username)
-  console.log('postID', postId)
   const comments = await userService.getComments(username, Number(postId))
   respose.json(comments)
 }

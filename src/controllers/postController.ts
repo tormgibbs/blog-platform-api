@@ -13,9 +13,10 @@ export const getPostById = async (request: Request, response: Response) => {
   response.json(post)
 }
 
-export const createPost = async (request: Request, response: Response) => {
-  const { title, content, userId } = request.body
-  const post = await postService.createOne({ title, content, userId })
+export const createPost: RequestHandler = async (request: CustomRequest, response: Response) => {
+  const { title, content } = request.body
+  const { username } = request.user as User
+  const post = await postService.createOne({ title, content, username })
   response.status(201).json(post)
 }
 
@@ -26,9 +27,10 @@ export const deletePost: RequestHandler = async (request: CustomRequest, respons
   response.status(204).end()
 }
 
-export const updatePost: RequestHandler = async (request, response) => {
+export const updatePost: RequestHandler = async (request: CustomRequest, response) => {
   const { id } = request.params
-  const post = await postService.updateOne({ ...request.body, postId: Number(id) })
+  const { username } = request.user as User
+  const post = await postService.updateOne({ ...request.body, postId: Number(id), username })
   response.json(post)
 }
 
