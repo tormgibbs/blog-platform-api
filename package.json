@@ -4,7 +4,8 @@
   "description": "A Blog Platform API built with typescript, node.js and express",
   "main": "index.js",
   "prisma": {
-    "seed": "tsx prisma/seed.ts"
+    "seed": "tsx prisma/seed.ts",
+    "schema": "src/prisma/schema.prisma"
   },
   "scripts": {
     "start": "node build/index.js",
