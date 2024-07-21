@@ -106,7 +106,7 @@ const getComments = async (username: string, postId:number) => {
 
   if (comments.length === 0) throw new CustomError('CommentNotFoundError', `Comments for post with id ${postId} not found for user ${username}`)
 
-  return comments.map(comment => {
+  return comments.map((comment:any) => {
     const { user, ...rest } = comment
     return {
       ...rest,
