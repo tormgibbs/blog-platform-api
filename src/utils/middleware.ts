@@ -1,7 +1,7 @@
 import { ErrorRequestHandler, NextFunction, Request, RequestHandler, Response } from 'express'
 import logger from './logger'
 import { ValidationError } from './parsers'
-import { Prisma } from '@prisma/client'
+// import { Prisma } from '@prisma/client'
 import { CustomError } from '../services/commentService'
 import { jwtDecrypt } from 'jose'
 import config from './config'
@@ -107,7 +107,6 @@ const errorHandler: ErrorRequestHandler = (error, _request, response, next) => {
   } else if (error.name === 'NotFoundError') {
     return response.status(404).json({ error: error.message })
   } else if (error.name === 'PrismaClientKnownRequestError') {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === 'P2025') {
         return response.status(404).json({ error: error.meta!.cause })
       } else if (error.code === 'P2002') {
@@ -116,7 +115,6 @@ const errorHandler: ErrorRequestHandler = (error, _request, response, next) => {
           error: `The ${target.join(', ')} field(s) already exists`
         })
       }
-    }
   } if (error instanceof CustomError) {
     if (error.name === 'AuthenticationError') {
       return response.status(401).json({ error: error.message })
