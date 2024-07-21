@@ -19,7 +19,7 @@ const getAll = async (postId: number) => {
     },
   })
 
-  return comments.map((comment) => ({
+  return comments.map((comment:any) => ({
     id: comment.id,
     content: comment.content,
     username: comment.user.username,
